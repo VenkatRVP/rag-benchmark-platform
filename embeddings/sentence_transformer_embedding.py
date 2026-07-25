@@ -39,3 +39,7 @@ class SentenceTransformerEmbedding(BaseEmbedding):
                     )
 
         return embedding
+
+    @property
+    def dimension(self) -> int:
+        return self.model.get_embedding_dimension()

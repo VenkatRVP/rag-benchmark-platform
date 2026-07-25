@@ -2,7 +2,7 @@ import faiss
 import numpy as np
 
 from models.chunk import Chunk
-from vectorstore import BaseVectorStore
+from vectorstore.base_vector_store import BaseVectorStore
 
 
 class FAISSVectorStore(BaseVectorStore):

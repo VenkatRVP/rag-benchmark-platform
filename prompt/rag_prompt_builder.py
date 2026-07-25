@@ -1,4 +1,4 @@
-from prompt import BasePromptBuilder
+from prompt.base_prompt_builder import BasePromptBuilder
 from models.chunk import Chunk
 
 DEFAULT_TEMPLATE = """

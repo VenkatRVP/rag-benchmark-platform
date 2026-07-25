@@ -1,6 +1,6 @@
-from retrievers import BaseRetriever
-from embeddings import BaseEmbedding
-from vectorstore import BaseVectorStore
+from retrievers.base_retriever import BaseRetriever
+from embeddings.base_embedding import BaseEmbedding
+from vectorstore.base_vector_store import BaseVectorStore
 from models.chunk import Chunk
 
 class DenseRetriever(BaseRetriever):

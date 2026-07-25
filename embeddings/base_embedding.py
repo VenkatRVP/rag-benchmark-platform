@@ -10,3 +10,9 @@ class BaseEmbedding(ABC):
     @abstractmethod
     def embed_query(self, query : str) -> np.ndarray:
         pass
+
+    @property
+    @abstractmethod
+    def dimension(self) -> int:
+        """Return the embedding dimension."""
+        pass

@@ -1,9 +1,9 @@
-from chunking import base_chunker
+from chunking.base_chunker import BaseChunker
 from models.chunk import Chunk
 from models.page import Page
 
 
-class FixedSizeChunker(base_chunker):
+class FixedSizeChunker(BaseChunker):
     def __init__(self, chunk_size: int = 500, overlap: int = 100):
         if chunk_size <= 0:
             raise ValueError("chunk_size must be greater than 0")
