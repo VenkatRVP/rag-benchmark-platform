@@ -1,15 +1,14 @@
 from pathlib import Path
-import faiss
-
 from loaders.pdf_loader import PDFLoader
 from chunking.fixed_size_chunker import FixedSizeChunker
 from embeddings.sentence_transformer_embedding import SentenceTransformerEmbedding
 from vectorstore.faiss_vector_store import FAISSVectorStore
 from vectorstore.faiss_factory import FAISSFactory
-from retrievers.dense_retriever import DenseRetriever
 from prompt.rag_prompt_builder import RAGPromptBuilder
 from llm.ollama_llm import OllamaLLM
 from pipeline.rag_pipeline import RAGPipeline
+from preparation.chunk_preparation import ChunkPreparation
+from retrievers.retriever_factory import RetrieverFactory
 
 loader = PDFLoader()
 
@@ -21,26 +20,31 @@ index = FAISSFactory.create_flat_l2(embedding.dimension)
 
 vector_store = FAISSVectorStore(index)
 
-retriever = DenseRetriever(
-    embedding=embedding,
-    vector_store=vector_store
-)
-
 prompt_builder = RAGPromptBuilder()
 
 llm = OllamaLLM()
 
 folder_path = Path("data/raw")
 
-pipeline = RAGPipeline(
+chunk_preparation = ChunkPreparation(
     loader=loader,
     chunker=chunker,
+    data_path=folder_path
+)
+
+chunks = chunk_preparation.prepare()
+
+retriever_factory = RetrieverFactory(
     embedding=embedding,
-    vector_store=vector_store,
+    vector_store=vector_store
+)
+retriever = retriever_factory.create("hybrid")
+
+pipeline = RAGPipeline(
     retriever=retriever,
     prompt_builder=prompt_builder,
     llm=llm,
-    data_path=folder_path
+    chunks=chunks
 )
 
 pipeline.index()

@@ -9,6 +9,10 @@ class DenseRetriever(BaseRetriever):
         self.embedding = embedding
         self.vector_store = vector_store
 
+    def index(self, chunks: list[Chunk])-> None :
+        chunks = self.embedding.embed(chunks)
+        self.vector_store.add(chunks)
+
     def retrieve(self, query: str, k : int = 3)-> list[tuple[Chunk, float]]:
         query_vector = self.embedding.embed_query(query)
         return self.vector_store.search(query_vector, k)
