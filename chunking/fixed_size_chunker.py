@@ -48,7 +48,7 @@ class FixedSizeChunker(BaseChunker):
                         page.document_name,
                         page.page_number,
                         chunk_text,
-                        chunk_id,
+                        f"{page.document_name}_{chunk_id}",
                     )
                 )
 

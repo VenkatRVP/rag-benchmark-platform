@@ -22,7 +22,8 @@ chunks = chunker.chunk(pages)
 print(f"Loaded {len(pages)} pages")
 print(f"Created {len(chunks)} chunks")
 
-retriever = BM25Retriever(chunks)
+retriever = BM25Retriever()
+retriever.index(chunks)
 
 query1 = "What is systems engineering?"
 query2 = "What is the difference between verification and validation?"

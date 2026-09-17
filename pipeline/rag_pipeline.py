@@ -9,13 +9,14 @@ class RAGPipeline:
         retriever: BaseRetriever,
         prompt_builder: BasePromptBuilder,
         llm: BaseLLM,
-        chunks: list[Chunk]
-    ):
+        chunks: list[Chunk],
+        logging : bool = False):
         self.retriever = retriever
         self.prompt_builder = prompt_builder
         self.llm = llm
         self.chunks = chunks
         self._is_indexed = False
+        self.logging = logging
 
     def index(self):
         self.retriever.index(self.chunks)
@@ -28,10 +29,14 @@ class RAGPipeline:
             )
         retrieved_chunks = self.retriever.retrieve(query=query, k=3)
 
-        for i, (chunk, score) in enumerate(retrieved_chunks):
-            print(f"\nChunk {i+1}")
-            print(f"Score: {score}")
-            print(chunk.chunk_text)
+        if self.logging:
+            for i, (chunk, score) in enumerate(retrieved_chunks):
+                print(f"\nChunk {i+1}")
+                print(f"Score: {score}")
+                print(chunk.chunk_text)
+
         prompt = self.prompt_builder.build(query, retrieved_chunks=retrieved_chunks)
-        print(f"Calling LLM...")
+
+        if self.logging:
+            print(f"Calling LLM...")
         return self.llm.generate(prompt)
