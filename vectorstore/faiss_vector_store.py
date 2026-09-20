@@ -7,11 +7,17 @@ from vectorstore.base_vector_store import BaseVectorStore
 
 class FAISSVectorStore(BaseVectorStore):
 
-    def __init__(self, index: faiss.Index):
+    def __init__(
+        self,
+        index: faiss.Index
+    ):
         self.index = index
         self._chunk_registry: list[Chunk] = []
 
-    def add(self, chunks: list[Chunk]) -> None:
+    def add(
+        self,
+        chunks: list[Chunk]
+    ) -> None:
 
         if not chunks:
             return
@@ -32,7 +38,7 @@ class FAISSVectorStore(BaseVectorStore):
 
         vectors = np.asarray(
             [chunk.embedding for chunk in chunks],
-            dtype=np.float32,
+            dtype=np.float32
         )
 
         self.index.add(vectors)
@@ -41,30 +47,37 @@ class FAISSVectorStore(BaseVectorStore):
     def search(
         self,
         query_vector: np.ndarray,
-        k: int = 3,
+        k: int = 3
     ) -> list[tuple[Chunk, float]]:
 
         if query_vector.ndim != 1:
-            raise ValueError("Query embedding must be a 1D vector.")
+            raise ValueError(
+                "Query embedding must be a 1D vector."
+            )
 
         query_matrix = np.asarray(
             query_vector,
-            dtype=np.float32,
+            dtype=np.float32
         ).reshape(1, -1)
 
-        distances, indices = self.index.search(query_matrix, k)
+        distances, indices = self.index.search(
+            query_matrix,
+            k
+        )
 
         results: list[tuple[Chunk, float]] = []
 
-        for chunk_index, distance in zip(indices[0], distances[0]):
-
+        for chunk_index, distance in zip(
+            indices[0],
+            distances[0]
+        ):
             if chunk_index == -1:
                 continue
 
             results.append(
                 (
                     self._chunk_registry[chunk_index],
-                    float(distance),
+                    float(distance)
                 )
             )
 

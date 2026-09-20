@@ -10,7 +10,10 @@ def test_valid_sample():
     )
 
     assert sample.question == "What is systems engineering?"
-    assert sample.relevant_chunk_ids == ["chunk_1", "chunk_2"]
+    assert sample.relevant_chunk_ids == [
+        "chunk_1",
+        "chunk_2"
+    ]
 
 
 def test_empty_question():

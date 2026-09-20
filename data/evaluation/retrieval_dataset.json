@@ -29,7 +29,8 @@
     "question": "What is the difference between verification and validation?",
     "relevant_chunk_ids": [
       "nasa_systems_engineering_handbook_0.pdf_126",
-      "nasa_systems_engineering_handbook_0.pdf_127"
+      "nasa_systems_engineering_handbook_0.pdf_127",
+      "nasa_systems_engineering_handbook_0.pdf_792"
     ]
   },
   {
@@ -43,12 +44,15 @@
     "question": "What is the purpose of requirements management?",
     "relevant_chunk_ids": [
       "nasa_systems_engineering_handbook_0.pdf_1049",
-      "nasa_systems_engineering_handbook_0.pdf_1050"
+      "nasa_systems_engineering_handbook_0.pdf_1050",
+      "nasa_systems_engineering_handbook_0.pdf_1510"
     ]
   },
   {
     "question": "What is logical decomposition?",
     "relevant_chunk_ids": [
+      "nasa_systems_engineering_handbook_0.pdf_492",
+      "nasa_systems_engineering_handbook_0.pdf_493",
       "nasa_systems_engineering_handbook_0.pdf_151",
       "nasa_systems_engineering_handbook_0.pdf_152"
     ]
@@ -57,13 +61,17 @@
     "question": "What is technical risk management?",
     "relevant_chunk_ids": [
       "nasa_systems_engineering_handbook_0.pdf_1109",
-      "nasa_systems_engineering_handbook_0.pdf_1110"
+      "nasa_systems_engineering_handbook_0.pdf_1110",
+      "nasa_systems_engineering_handbook_0.pdf_1129",
+      "nasa_systems_engineering_handbook_0.pdf_1130",
+      "nasa_systems_engineering_handbook_0.pdf_1134"
     ]
   },
   {
     "question": "What is decision analysis?",
     "relevant_chunk_ids": [
-      "nasa_systems_engineering_handbook_0.pdf_1274"
+      "nasa_systems_engineering_handbook_0.pdf_1274",
+      "nasa_systems_engineering_handbook_0.pdf_1412"
     ]
   }
 ]

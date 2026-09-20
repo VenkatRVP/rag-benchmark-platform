@@ -1,5 +1,6 @@
-from prompt.base_prompt_builder import BasePromptBuilder
 from models.chunk import Chunk
+from prompt.base_prompt_builder import BasePromptBuilder
+
 
 DEFAULT_TEMPLATE = """
 You are a helpful AI assistant.
@@ -22,14 +23,29 @@ Question:
 Answer:
 """.strip()
 
+
 class RAGPromptBuilder(BasePromptBuilder):
-    
-    def __init__(self, template: str | None = None) -> None:
+
+    def __init__(
+        self,
+        template: str | None = None
+    ) -> None:
         self.template = template or DEFAULT_TEMPLATE
 
-    def build(self,user_query : str, retrieved_chunks : list[tuple[Chunk, float]]) -> str :
-        context = "\n\n".join(f"Chunk {i+1}:\n{chunk.chunk_text}" for i, (chunk,_) in enumerate(retrieved_chunks))
-        return self.template.format(
-                context=context,
-                question=user_query
+    def build(
+        self,
+        user_query: str,
+        retrieved_chunks: list[tuple[Chunk, float]]
+    ) -> str:
+
+        context = "\n\n".join(
+            f"Chunk {i + 1}:\n{chunk.chunk_text}"
+            for i, (chunk, _) in enumerate(
+                retrieved_chunks
             )
+        )
+
+        return self.template.format(
+            context=context,
+            question=user_query
+        )

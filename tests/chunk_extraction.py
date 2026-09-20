@@ -5,25 +5,7 @@ from chunking.fixed_size_chunker import FixedSizeChunker
 from preparation.chunk_preparation import ChunkPreparation
 
 
-def print_results(retriever_name, query, results):
-    print(f"\n{'=' * 60}")
-    print(f"{retriever_name}")
-    print(f"Query: {query}")
-    print(f"{'=' * 60}")
-
-    for rank, (chunk, score) in enumerate(results, start=1):
-        print(f"\nRank {rank}")
-        print(f"Chunk ID: {chunk.chunk_id}")
-        print(f"Page: {chunk.page_number}")
-        print(f"Score: {score}")
-        print(f"Text: {chunk.chunk_text[:300]}")
-
-
-def main():
-
-    # -------------------------
-    # Prepare chunks
-    # -------------------------
+def main() -> None:
 
     loader = PDFLoader()
     chunker = FixedSizeChunker()
@@ -38,13 +20,25 @@ def main():
 
     chunks = chunk_preparation.prepare()
 
-    with open("data/evaluation_chunks.txt", "w", encoding="utf-8") as f:
-        for chunk in chunks:
-            f.write(f"Chunk ID: {chunk.chunk_id}\n")
-            f.write(f"Page: {chunk.page_number}\n")
-            f.write(f"Text:\n{chunk.chunk_text}\n")
-            f.write("=" * 80 + "\n\n")
+    with open(
+        "data/evaluation_chunks.txt",
+        "w",
+        encoding="utf-8"
+    ) as file:
 
+        for chunk in chunks:
+            file.write(
+                f"Chunk ID: {chunk.chunk_id}\n"
+            )
+            file.write(
+                f"Page: {chunk.page_number}\n"
+            )
+            file.write(
+                f"Text:\n{chunk.chunk_text}\n"
+            )
+            file.write(
+                "=" * 80 + "\n\n"
+            )
 
 
 if __name__ == "__main__":

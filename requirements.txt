@@ -1,1 +1,7 @@
-PyMuPDF
+faiss-cpu
+numpy
+pymupdf
+sentence-transformers
+rank-bm25
+ollama
+pytest

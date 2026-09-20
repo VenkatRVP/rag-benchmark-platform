@@ -1,9 +1,14 @@
 from abc import ABC, abstractmethod
-from models.page import Page
+
 from models.chunk import Chunk
+from models.page import Page
+
 
 class BaseChunker(ABC):
 
     @abstractmethod
-    def chunk(self, pages: list[Page])-> list[Chunk]:
+    def chunk(
+        self,
+        pages: list[Page]
+    ) -> list[Chunk]:
         pass

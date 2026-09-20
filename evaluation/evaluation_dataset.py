@@ -19,7 +19,11 @@ class EvaluationDataset:
         file_path = Path(path)
 
         try:
-            with open(file_path, "r", encoding="utf-8") as file:
+            with open(
+                file_path,
+                "r",
+                encoding="utf-8"
+            ) as file:
                 raw_list = json.load(file)
 
             samples = [
@@ -38,14 +42,19 @@ class EvaluationDataset:
             )
 
     def get_relevant_chunk_ids(
-    self,
-    question: str
-) -> list[str]:
+        self,
+        question: str
+    ) -> list[str]:
 
         if not self.loaded:
-            raise ValueError("Dataset should be loaded")
+            raise ValueError(
+                "Dataset should be loaded"
+            )
+
         for sample in self.samples:
             if sample.question == question:
                 return sample.relevant_chunk_ids
 
-        raise KeyError(f"Question not found: {question}")
+        raise KeyError(
+            f"Question not found: {question}"
+        )

@@ -1,4 +1,5 @@
 from pathlib import Path
+
 from loaders.pdf_loader import PDFLoader
 from chunking.fixed_size_chunker import FixedSizeChunker
 from embeddings.sentence_transformer_embedding import SentenceTransformerEmbedding
@@ -10,61 +11,76 @@ from pipeline.rag_pipeline import RAGPipeline
 from preparation.chunk_preparation import ChunkPreparation
 from retrievers.retriever_factory import RetrieverFactory
 
-loader = PDFLoader()
 
-chunker = FixedSizeChunker()
+def main() -> None:
 
-embedding = SentenceTransformerEmbedding()
+    loader = PDFLoader()
 
-index = FAISSFactory.create_flat_l2(embedding.dimension)
+    chunker = FixedSizeChunker()
 
-vector_store = FAISSVectorStore(index)
+    embedding = SentenceTransformerEmbedding()
 
-prompt_builder = RAGPromptBuilder()
+    index = FAISSFactory.create_flat_l2(
+        embedding.dimension
+    )
 
-llm = OllamaLLM()
+    vector_store = FAISSVectorStore(index)
 
-folder_path = Path("data/raw")
+    prompt_builder = RAGPromptBuilder()
 
-chunk_preparation = ChunkPreparation(
-    loader=loader,
-    chunker=chunker,
-    data_path=folder_path
-)
+    llm = OllamaLLM()
 
-chunks = chunk_preparation.prepare()
+    folder_path = Path("data/raw")
 
-retriever_factory = RetrieverFactory(
-    embedding=embedding,
-    vector_store=vector_store
-)
-retriever = retriever_factory.create("hybrid")
+    chunk_preparation = ChunkPreparation(
+        loader=loader,
+        chunker=chunker,
+        data_path=folder_path
+    )
 
-pipeline = RAGPipeline(
-    retriever=retriever,
-    prompt_builder=prompt_builder,
-    llm=llm,
-    chunks=chunks
-)
+    chunks = chunk_preparation.prepare()
 
-pipeline.index()
+    retriever_factory = RetrieverFactory(
+        embedding=embedding,
+        vector_store=vector_store
+    )
 
-print("\nRAG Pipeline is ready!")
-print("Type 'exit' or 'quit' to stop.\n")
+    retriever = retriever_factory.create(
+        "hybrid"
+    )
 
-while True:
-    query = input("You: ").strip()
+    pipeline = RAGPipeline(
+        retriever=retriever,
+        prompt_builder=prompt_builder,
+        llm=llm,
+        chunks=chunks,
+        logging=False
+    )
 
-    if query.lower() in ("exit", "quit"):
-        print("Goodbye!")
-        break
+    pipeline.index()
 
-    if not query:
-        print("Please enter a question.\n")
-        continue
+    print("\nRAG Pipeline is ready!")
+    print("Type 'exit' or 'quit' to stop.\n")
 
-    try:
-        answer = pipeline.ask(query)
-        print(f"\nAssistant: {answer}\n")
-    except Exception as e:
-        print(f"\nError: {e}\n")
+    while True:
+
+        query = input("You: ").strip()
+
+        if query.lower() in ("exit", "quit"):
+            print("Goodbye!")
+            break
+
+        if not query:
+            print("Please enter a question.\n")
+            continue
+
+        try:
+            answer = pipeline.ask(query)
+            print(f"\nAssistant: {answer}\n")
+
+        except Exception as e:
+            print(f"\nError: {e}\n")
+
+
+if __name__ == "__main__":
+    main()

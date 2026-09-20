@@ -10,14 +10,18 @@ class HybridRetriever(BaseRetriever):
         self,
         dense_retriever: DenseRetriever,
         bm25_retriever: BM25Retriever,
-        candidate_k: int = 10
+        candidate_k: int = 10,
+        rrf_constant: int = 60
     ) -> None:
         self.dense_retriever = dense_retriever
         self.bm25_retriever = bm25_retriever
         self.candidate_k = candidate_k
-        self.rrf_constant = 60
+        self.rrf_constant = rrf_constant
 
-    def index(self, chunks: list[Chunk]) -> None:
+    def index(
+        self,
+        chunks: list[Chunk]
+    ) -> None:
         self.dense_retriever.index(chunks)
         self.bm25_retriever.index(chunks)
 
@@ -27,7 +31,6 @@ class HybridRetriever(BaseRetriever):
         k: int = 3
     ) -> list[tuple[Chunk, float]]:
 
-        # Get candidates from both retrievers
         dense_results = self.dense_retriever.retrieve(
             query=query,
             k=self.candidate_k
@@ -38,40 +41,43 @@ class HybridRetriever(BaseRetriever):
             k=self.candidate_k
         )
 
-        # Store the chunks and their RRF scores
         rrf_scores = {}
         chunks_by_id = {}
 
-        # Add Dense ranking contribution
-        for rank, (chunk, _) in enumerate(dense_results, start=1):
-
+        for rank, (chunk, _) in enumerate(
+            dense_results,
+            start=1
+        ):
             chunks_by_id[chunk.chunk_id] = chunk
 
-            score = 1 / (self.rrf_constant + rank)
+            score = 1 / (
+                self.rrf_constant + rank
+            )
 
             rrf_scores[chunk.chunk_id] = (
                 rrf_scores.get(chunk.chunk_id, 0) + score
             )
 
-        # Add BM25 ranking contribution
-        for rank, (chunk, _) in enumerate(bm25_results, start=1):
-
+        for rank, (chunk, _) in enumerate(
+            bm25_results,
+            start=1
+        ):
             chunks_by_id[chunk.chunk_id] = chunk
 
-            score = 1 / (self.rrf_constant + rank)
+            score = 1 / (
+                self.rrf_constant + rank
+            )
 
             rrf_scores[chunk.chunk_id] = (
                 rrf_scores.get(chunk.chunk_id, 0) + score
             )
 
-        # Sort chunks by their RRF score
         ranked_results = sorted(
             rrf_scores.items(),
             key=lambda item: item[1],
             reverse=True
         )
 
-        # Return only the requested top-k results
         return [
             (chunks_by_id[chunk_id], score)
             for chunk_id, score in ranked_results[:k]

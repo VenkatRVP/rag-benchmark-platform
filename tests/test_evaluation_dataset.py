@@ -32,7 +32,10 @@ def test_sample_fields_are_accessible():
 
 def test_missing_file_raises_error():
     with pytest.raises(FileNotFoundError):
-        EvaluationDataset.load("does_not_exist.json")
+        EvaluationDataset.load(
+            "does_not_exist.json"
+        )
+
 
 def test_get_relevant_chunk_ids():
     dataset = EvaluationDataset.load(

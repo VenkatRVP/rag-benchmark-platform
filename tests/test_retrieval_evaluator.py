@@ -119,6 +119,7 @@ def test_recall_empty_relevant_ids():
             k=3
         )
 
+
 def test_precision_all_chunks_are_relevant():
     evaluator = RetrievalEvaluator()
 
@@ -137,6 +138,7 @@ def test_precision_all_chunks_are_relevant():
     )
 
     assert result == 1.0
+
 
 def test_precision_one_relevant_chunk():
     evaluator = RetrievalEvaluator()
@@ -177,6 +179,7 @@ def test_precision_no_relevant_chunks():
 
     assert result == 0.0
 
+
 def test_precision_respects_k():
     evaluator = RetrievalEvaluator()
 
@@ -196,6 +199,7 @@ def test_precision_respects_k():
 
     assert result == 1.0
 
+
 def test_precision_when_fewer_chunks_than_k():
     evaluator = RetrievalEvaluator()
 
@@ -214,6 +218,7 @@ def test_precision_when_fewer_chunks_than_k():
 
     assert result == 1 / 2
 
+
 def test_precision_invalid_k():
     evaluator = RetrievalEvaluator()
 
@@ -227,6 +232,7 @@ def test_precision_invalid_k():
             k=0
         )
 
+
 def test_precision_empty_relevant_ids():
     evaluator = RetrievalEvaluator()
 
@@ -239,24 +245,6 @@ def test_precision_empty_relevant_ids():
             k=3
         )
 
-def test_hit_rate_relevant_chunk_retrieved():
-    evaluator = RetrievalEvaluator()
-
-    retrieved = [
-        create_chunk("A"),
-        create_chunk("C"),
-        create_chunk("D")
-    ]
-
-    relevant = ["A", "B"]
-
-    result = evaluator.hit_rate_at_k(
-        retrieved_chunks=retrieved,
-        relevant_chunk_ids=relevant,
-        k=3
-    )
-
-    assert result == 1.0
 
 def test_hit_rate_relevant_chunk_retrieved():
     evaluator = RetrievalEvaluator()
@@ -276,6 +264,7 @@ def test_hit_rate_relevant_chunk_retrieved():
     )
 
     assert result == 1.0
+
 
 def test_hit_rate_respects_k():
     evaluator = RetrievalEvaluator()
@@ -296,6 +285,7 @@ def test_hit_rate_respects_k():
 
     assert result == 0.0
 
+
 def test_hit_rate_multiple_relevant_chunks():
     evaluator = RetrievalEvaluator()
 
@@ -315,6 +305,7 @@ def test_hit_rate_multiple_relevant_chunks():
 
     assert result == 1.0
 
+
 def test_hit_rate_invalid_k():
     evaluator = RetrievalEvaluator()
 
@@ -328,6 +319,7 @@ def test_hit_rate_invalid_k():
             k=0
         )
 
+
 def test_hit_rate_empty_relevant_ids():
     evaluator = RetrievalEvaluator()
 
@@ -339,6 +331,7 @@ def test_hit_rate_empty_relevant_ids():
             relevant_chunk_ids=[],
             k=3
         )
+
 
 def test_hit_rate_empty_retrieved_chunks():
     evaluator = RetrievalEvaluator()
@@ -353,6 +346,7 @@ def test_hit_rate_empty_retrieved_chunks():
     )
 
     assert result == 0.0
+
 
 def test_reciprocal_rank_relevant_chunk_at_rank_one():
     evaluator = RetrievalEvaluator()
@@ -373,6 +367,7 @@ def test_reciprocal_rank_relevant_chunk_at_rank_one():
 
     assert result == 1.0
 
+
 def test_reciprocal_rank_relevant_chunk_at_rank_two():
     evaluator = RetrievalEvaluator()
 
@@ -392,24 +387,6 @@ def test_reciprocal_rank_relevant_chunk_at_rank_two():
 
     assert result == 1 / 2
 
-def test_reciprocal_rank_relevant_chunk_at_rank_three():
-    evaluator = RetrievalEvaluator()
-
-    retrieved = [
-        create_chunk("C"),
-        create_chunk("D"),
-        create_chunk("A")
-    ]
-
-    relevant = ["A"]
-
-    result = evaluator.reciprocal_rank_at_k(
-        retrieved_chunks=retrieved,
-        relevant_chunk_ids=relevant,
-        k=3
-    )
-
-    assert result == 1 / 3
 
 def test_reciprocal_rank_relevant_chunk_at_rank_three():
     evaluator = RetrievalEvaluator()
@@ -429,6 +406,7 @@ def test_reciprocal_rank_relevant_chunk_at_rank_three():
     )
 
     assert result == 1 / 3
+
 
 def test_reciprocal_rank_no_relevant_chunk():
     evaluator = RetrievalEvaluator()
@@ -449,6 +427,7 @@ def test_reciprocal_rank_no_relevant_chunk():
 
     assert result == 0.0
 
+
 def test_reciprocal_rank_uses_first_relevant_chunk():
     evaluator = RetrievalEvaluator()
 
@@ -468,6 +447,7 @@ def test_reciprocal_rank_uses_first_relevant_chunk():
 
     assert result == 1 / 2
 
+
 def test_reciprocal_rank_invalid_k():
     evaluator = RetrievalEvaluator()
 
@@ -481,17 +461,6 @@ def test_reciprocal_rank_invalid_k():
             k=0
         )
 
-def test_reciprocal_rank_empty_relevant_ids():
-    evaluator = RetrievalEvaluator()
-
-    retrieved = [create_chunk("A")]
-
-    with pytest.raises(ValueError):
-        evaluator.reciprocal_rank_at_k(
-            retrieved_chunks=retrieved,
-            relevant_chunk_ids=[],
-            k=3
-        )
 
 def test_reciprocal_rank_empty_relevant_ids():
     evaluator = RetrievalEvaluator()
@@ -504,6 +473,7 @@ def test_reciprocal_rank_empty_relevant_ids():
             relevant_chunk_ids=[],
             k=3
         )
+
 
 def test_reciprocal_rank_empty_retrieved_chunks():
     evaluator = RetrievalEvaluator()
@@ -519,11 +489,17 @@ def test_reciprocal_rank_empty_retrieved_chunks():
 
     assert result == 0.0
 
+
 def test_evaluate():
     evaluator = RetrievalEvaluator()
 
-    retrieved = [create_chunk("C"),create_chunk("A"),create_chunk("D")]
-    relevant = ["A","B"]
+    retrieved = [
+        create_chunk("C"),
+        create_chunk("A"),
+        create_chunk("D")
+    ]
+
+    relevant = ["A", "B"]
 
     result = evaluator.evaluate(
         retrieved_chunks=retrieved,
@@ -531,7 +507,7 @@ def test_evaluate():
         k=3
     )
 
-    assert result.recall == 1/2
-    assert result.precision == 1/3
+    assert result.recall == 1 / 2
+    assert result.precision == 1 / 3
     assert result.hit_rate == 1.0
-    assert result.reciprocal_rank == 1/2
+    assert result.reciprocal_rank == 1 / 2
